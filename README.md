@@ -17,14 +17,19 @@ The baseline models uses only covid-chestxray-dataset which is rather small (79 
 They are also accessible with following python packages:
 
 https://github.com/ieee8023/covid-chestxray-dataset
+
 https://github.com/mlmed/torchxrayvision
 
 
-Interface:
+## Interface:
+
 ![](snaps/covid_interface.png)
 
-Training Stats:
+## Training Stats:
+
+![](snaps/CM_COVID19.png)
 ![](snaps/plt1.png)
+
 
 
 ## Inferences
@@ -38,7 +43,7 @@ Please keep in mind that the COVID-19 detector is for educational purposes only 
 
 ## References
 
--Detecting COVID-19 in X-ray images with Keras, TensorFlow, and Deep Learning by Adrian Rosebrock on March 16, 2020
+Detecting COVID-19 in X-ray images with Keras, TensorFlow, and Deep Learning by Adrian Rosebrock on March 16, 2020
 
 ## Acknowledgement
 
