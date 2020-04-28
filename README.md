@@ -1,5 +1,5 @@
-# Detect_COVID-19_from_X-ray (Model deployed in AWS)
-Detecting COVID-19 using X-ray test images. Front end code to allow the user to upload test images and get the predictions. The aim of this experiment was to see if different CNN architectures would make a difference in the prediction accuracy. VGGNet and DenseNet both architectures are employed. Former using Tensoflow + Keras and latter using Pytorch Lightning. The model is deployed using Amazon AWS. 
+# Detect_COVID-19_from_X-ray (Model deployed using AWS)
+Frontend folder contains the code that was written to allow the user to upload test images and get the predictions. The aim of this experiment was to see if different CNN architectures would make a difference in the prediction accuracy. VGGNet and DenseNet both architectures are employed. Former using Tensoflow + Keras and latter using Pytorch Lightning. The model is deployed using Amazon AWS. 
 
 ## Disclaimer
 This git repo is for educational purposes only. It is not meant to be a reliable, highly accurate COVID-19 diagnosis system, nor has it been professionally or academically vetted.
