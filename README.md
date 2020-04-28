@@ -1,5 +1,5 @@
-# Detect_COVID-19_from_X-ray
-Detecting COVID-19 using X-ray test images. Front end code to allow the user to upload test images and get the predictions
+# Detect_COVID-19_from_X-ray (Model deployed in AWS)
+Detecting COVID-19 using X-ray test images. Front end code to allow the user to upload test images and get the predictions. The aim of this experiment was to see if different CNN architectures would make a difference in the prediction accuracy. VGGNet and DenseNet both architectures are employed. Former using Tensoflow + Keras and latter using Pytorch Lightning. The model is deployed using Amazon AWS. 
 
 ## Disclaimer
 This git repo is for educational purposes only. It is not meant to be a reliable, highly accurate COVID-19 diagnosis system, nor has it been professionally or academically vetted.
@@ -29,7 +29,7 @@ Training Stats:
 
 ## Inferences
 
-High quality, peer reviewed image datasets for COVID-19 don’t exist yet, so we had to work with what we had.
+High quality, peer reviewed image datasets for COVID-19 don’t exist yet, so we had to work with what we had. Even with VGGNet full accuracy was achieved on test set. 
 
 We sampled 25 images from Cohen’s dataset, taking only the posterioranterior (PA) view of COVID-19 positive cases.
 We then sampled 25 images of healthy patients using Kaggle’s Chest X-Ray Images (Pneumonia) dataset. From there we used Keras and TensorFlow to train a COVID-19 detector that was capable of obtaining 100% accuracy on our testing set with 100% sensitivity and 100% specificity (given our limited dataset).
@@ -38,14 +38,13 @@ Please keep in mind that the COVID-19 detector is for educational purposes only 
 
 ## References
 
--Detecting COVID-19 in X-ray images with Keras, TensorFlow, and Deep Learning
-by Adrian Rosebrock on March 16, 2020
+-Detecting COVID-19 in X-ray images with Keras, TensorFlow, and Deep Learning by Adrian Rosebrock on March 16, 2020
 
 ## Acknowledgement
 
-Thanks to pytorch lightning team, Adrain Rosebrock, 
+Thanks to pytorch lightning team, Adrain Rosebrock, and Dr. Joseph Cohen.
 
-## Contribution
+## Contributions are Welcomed
 
 Anyone is welcome to contribute and use this project!
 
