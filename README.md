@@ -24,6 +24,7 @@ https://github.com/mlmed/torchxrayvision
 ## Interface:
 
 ![](snaps/covid_interface.png)
+![](snaps/covid_interface2.png)
 
 ## Training Stats:
 
