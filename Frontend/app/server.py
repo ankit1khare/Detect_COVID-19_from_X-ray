@@ -5,15 +5,18 @@ from starlette.middleware.cors import CORSMiddleware
 import uvicorn, aiohttp, asyncio
 from io import BytesIO
 
-# from fastai import *
-# from fastai.vision import *
-from tensorflow.keras.models import Model
+from PIL import Image
+from tensorflow.keras.models import load_model
+import cv2
+import pathlib
+import numpy as np
 
-export_file_url = 'https://www.dropbox.com/s/vovlt9wbobot0w0/eye_export.pkl?dl=1'
-export_file_name = 'export.pkl'
 
-classes = ['', '0', '1', '10', '11', '12', '13', '14', '2', '3', '4', '5', '6', '7', '8', '9']
-path = Path(__file__).parent
+export_file_url = 'https://www.dropbox.com/s/kupg33j3ygn4o0r/covid-19_2x2.model?dl=1'
+export_file_name = 'covid-19_2x2.model'
+
+classes = ['Infected', 'Normal']
+path = pathlib.Path().parent.absolute()
 
 app = Starlette()
 app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_headers=['X-Requested-With', 'Content-Type'])
@@ -27,18 +30,18 @@ async def download_file(url, dest):
             with open(dest, 'wb') as f: f.write(data)
 
 async def setup_learner():
-    await download_file(export_file_url, path/export_file_name)
+    await download_file(export_file_url, str(path/export_file_name))
     try:
-        # learn = load_learner(path, export_file_name)
-        model = load_model(fileName)
-        return model
+        learn = load_model(str(path/export_file_name))
+        return learn
     except RuntimeError as e:
         if len(e.args) > 0 and 'CPU-only machine' in e.args[0]:
             print(e)
-            message = "\n\nThis model was trained with an old version of fastai and will not work in a CPU environment.\n\nPlease update the fastai library in your training environment and export your model again.\n\nSee instructions for 'Returning to work' at https://course.fast.ai."
+            message = "\n\nSome thing went wrong"
             raise RuntimeError(message)
         else:
             raise
+
 
 loop = asyncio.get_event_loop()
 tasks = [asyncio.ensure_future(setup_learner())]
@@ -55,14 +58,13 @@ async def analyze(request):
     data = await request.form()
     img_bytes = await (data['file'].read())
     img = open_image(BytesIO(img_bytes))
-    # prediction = model.predict(img)[0]
-    predIdxs = model.predict(img, batch_size=1)
+    img = img.convert('RGB')
+    img = img.resize((224, 224))     
+    img = np.array(img)
 
-    # for each image in the testing set we need to find the index of the
-    # label with corresponding largest predicted probability
-    predIdxs = np.argmax(predIdxs, axis=1)
-
-    return JSONResponse({'result': str(predIdxs)})
+    data = np.array([img]) / 255.0  
+    prediction = learn.predict(data)[0]
+    return JSONResponse({'result': str(classes[np.argmax(prediction)])})
 
 if __name__ == '__main__':
     if 'serve' in sys.argv: uvicorn.run(app=app, host='0.0.0.0', port=5042)
