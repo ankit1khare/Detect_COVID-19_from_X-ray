@@ -5,8 +5,9 @@ from starlette.middleware.cors import CORSMiddleware
 import uvicorn, aiohttp, asyncio
 from io import BytesIO
 
-from fastai import *
-from fastai.vision import *
+# from fastai import *
+# from fastai.vision import *
+from tensorflow.keras.models import Model
 
 export_file_url = 'https://www.dropbox.com/s/vovlt9wbobot0w0/eye_export.pkl?dl=1'
 export_file_name = 'export.pkl'
@@ -28,8 +29,9 @@ async def download_file(url, dest):
 async def setup_learner():
     await download_file(export_file_url, path/export_file_name)
     try:
-        learn = load_learner(path, export_file_name)
-        return learn
+        # learn = load_learner(path, export_file_name)
+        model = load_model(fileName)
+        return model
     except RuntimeError as e:
         if len(e.args) > 0 and 'CPU-only machine' in e.args[0]:
             print(e)
@@ -40,7 +42,7 @@ async def setup_learner():
 
 loop = asyncio.get_event_loop()
 tasks = [asyncio.ensure_future(setup_learner())]
-learn = loop.run_until_complete(asyncio.gather(*tasks))[0]
+model = loop.run_until_complete(asyncio.gather(*tasks))[0]
 loop.close()
 
 @app.route('/')
@@ -53,8 +55,14 @@ async def analyze(request):
     data = await request.form()
     img_bytes = await (data['file'].read())
     img = open_image(BytesIO(img_bytes))
-    prediction = learn.predict(img)[0]
-    return JSONResponse({'result': str(prediction)})
+    # prediction = model.predict(img)[0]
+    predIdxs = model.predict(img, batch_size=1)
+
+    # for each image in the testing set we need to find the index of the
+    # label with corresponding largest predicted probability
+    predIdxs = np.argmax(predIdxs, axis=1)
+
+    return JSONResponse({'result': str(predIdxs)})
 
 if __name__ == '__main__':
     if 'serve' in sys.argv: uvicorn.run(app=app, host='0.0.0.0', port=5042)
