@@ -28,7 +28,12 @@ https://github.com/mlmed/torchxrayvision
 ## Training Stats:
 
 ![](snaps/CM_COVID19.png)
+
+With 4x4 max pooling
 ![](snaps/plt1.png)
+
+With 2x2 max pooling
+![](snaps/plt2x2.png)
 
 
 
